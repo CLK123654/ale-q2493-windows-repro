@@ -49,13 +49,20 @@ BEGIN
     FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
     WHERE x.dq<>0 OR x.da<>0 OR x.dc<>0;
 
+    UPDATE metering.daily_charge d
+       SET quantity=d.quantity+x.dq,
+           amount=d.amount+x.da,
+           event_count=d.event_count+x.dc
+      FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
+     WHERE d.account_id=x.account_id AND d.service_day=x.service_day AND d.sku=x.sku;
+
     INSERT INTO metering.daily_charge(account_id,service_day,sku,quantity,amount,event_count)
     SELECT x.account_id,x.service_day,x.sku,x.dq,x.da,x.dc
-    FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
-    ON CONFLICT(account_id,service_day,sku) DO UPDATE
-       SET quantity=daily_charge.quantity+excluded.quantity,
-           amount=daily_charge.amount+excluded.amount,
-           event_count=daily_charge.event_count+excluded.event_count;
+      FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
+     WHERE x.dc>0 AND NOT EXISTS(
+       SELECT 1 FROM metering.daily_charge d
+        WHERE d.account_id=x.account_id AND d.service_day=x.service_day AND d.sku=x.sku
+     );
     DELETE FROM metering.daily_charge WHERE event_count=0;
 END $$;
 
