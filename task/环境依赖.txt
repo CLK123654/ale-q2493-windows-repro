@@ -1,0 +1,7 @@
+支持的操作系统为Windows11。主软件名称为PostgreSQL Client，连接Windows本机PostgreSQL17数据库服务，通过psql.exe执行SQL。PostgreSQL按PostgreSQL License使用。
+
+辅助工具包括PowerShell7、Python3.12、UTF-8文本编辑器、CSV查看器和JSON查看器。Python负责检查本地CSV、调用psql、按批提交SQL与导出结果，日汇总增量和底账重算均由PostgreSQL完成。
+
+准备环境时允许联网安装固定版本，正式处理本地材料时无需联网。操作者需要创建本地数据库、执行DDL与DML、读取输入目录和新建输出目录的权限，不需要远程数据库、生产账单权限或客户凭据。
+
+计量入账最怕跨账户更正只写入新归属而没有回冲旧归属，几条同批变化还可能落到同一个汇总键。批次净变化要在数据库里按业务键合并，并在每批结束后与事件底账重算结果对齐。

@@ -1,0 +1,11 @@
+batch_id,batch_order,operation,event_id,account_id,service_day,sku,quantity,unit_price,billable
+COR-0712,1,INSERT,EV-1011,ACME,2026-07-03,api_calls,30.000,,true
+COR-0712,2,INSERT,EV-1012,CEDAR,2026-07-04,storage_gb,2.000,,true
+COR-0715,1,UPDATE,EV-1003,CEDAR,2026-07-04,api_calls,85.000,,true
+COR-0715,2,UPDATE,EV-1004,BRIGHT,2026-07-04,egress_gb,10.000,,true
+COR-0715,3,UPDATE,EV-1002,ACME,2026-07-03,storage_gb,8.500,0.2000,true
+COR-0718,1,UPDATE,EV-1005,CEDAR,2026-07-04,api_calls,60.000,,false
+COR-0718,2,UPDATE,EV-1006,CEDAR,2026-07-04,storage_gb,5.000,,true
+COR-0720,1,DELETE,EV-1009,,,,,,
+COR-0720,2,INSERT,EV-1013,BRIGHT,2026-07-05,egress_gb,6.000,,true
+COR-0720,3,UPDATE,EV-1010,ACME,2026-07-05,api_calls,45.000,,true

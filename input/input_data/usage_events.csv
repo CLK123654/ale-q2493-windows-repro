@@ -1,0 +1,11 @@
+event_id,account_id,service_day,sku,quantity,billable
+EV-1001,ACME,2026-07-03,api_calls,120.000,true
+EV-1002,ACME,2026-07-03,storage_gb,8.500,true
+EV-1003,BRIGHT,2026-07-03,api_calls,85.000,true
+EV-1004,BRIGHT,2026-07-04,egress_gb,12.000,true
+EV-1005,CEDAR,2026-07-04,api_calls,60.000,true
+EV-1006,CEDAR,2026-07-04,storage_gb,5.000,false
+EV-1007,ACME,2026-07-05,egress_gb,4.500,true
+EV-1008,BRIGHT,2026-07-05,storage_gb,3.250,true
+EV-1009,CEDAR,2026-07-05,egress_gb,7.000,true
+EV-1010,ACME,2026-07-05,api_calls,40.000,true

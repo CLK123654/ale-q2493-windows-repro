@@ -1,0 +1,4 @@
+sku,unit_price,currency
+api_calls,0.0250,USD
+storage_gb,0.1800,USD
+egress_gb,0.0900,USD

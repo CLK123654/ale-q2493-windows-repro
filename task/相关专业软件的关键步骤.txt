@@ -1,0 +1,13 @@
+1. 在PostgreSQL Client中装载pricing_catalog.csv、usage_events.csv和correction_batches.csv，建立SKU引用、事件主键和批次顺序约束。
+
+2. 建立usage_event、daily_charge、charge_delta_log与batch_reconciliation，金额使用numeric固定精度。
+
+3. 为INSERT、UPDATE和DELETE建立语句级AFTER触发器，通过NEW TABLE或OLD TABLE读取同一语句影响的行。
+
+4. INSERT汇总新事件正项，DELETE汇总旧事件负项，UPDATE合并旧事件负项和新事件正项后再按账户、日期与SKU折叠。
+
+5. 将非零净变化写入charge_delta_log并更新daily_charge，事件数归零的键从日汇总移除。
+
+6. 按batch_id和batch_order执行更正，每批结束后用事件底账重算并比较缺失键、数量差与金额差。
+
+7. 导出最终日费用、事件底账、批次结果、净变化和对账记录，交给计费人员继续账单生成。
