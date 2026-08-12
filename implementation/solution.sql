@@ -44,19 +44,19 @@ CREATE TABLE batch_reconciliation(
 CREATE OR REPLACE FUNCTION apply_charge_delta(p_batch text,p_op text,p_rows jsonb)
 RETURNS void LANGUAGE plpgsql AS $$
 BEGIN
-    INSERT INTO charge_delta_log
+    INSERT INTO metering.charge_delta_log
     SELECT p_batch,p_op,x.account_id,x.service_day,x.sku,x.dq,x.da,x.dc
     FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
     WHERE x.dq<>0 OR x.da<>0 OR x.dc<>0;
 
-    INSERT INTO daily_charge(account_id,service_day,sku,quantity,amount,event_count)
+    INSERT INTO metering.daily_charge(account_id,service_day,sku,quantity,amount,event_count)
     SELECT x.account_id,x.service_day,x.sku,x.dq,x.da,x.dc
     FROM jsonb_to_recordset(p_rows) AS x(account_id text,service_day date,sku text,dq numeric,da numeric,dc integer)
     ON CONFLICT(account_id,service_day,sku) DO UPDATE
        SET quantity=daily_charge.quantity+excluded.quantity,
            amount=daily_charge.amount+excluded.amount,
            event_count=daily_charge.event_count+excluded.event_count;
-    DELETE FROM daily_charge WHERE event_count=0;
+    DELETE FROM metering.daily_charge WHERE event_count=0;
 END $$;
 
 CREATE OR REPLACE FUNCTION usage_insert_delta() RETURNS trigger LANGUAGE plpgsql AS $$
