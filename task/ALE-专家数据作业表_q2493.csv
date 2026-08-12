@@ -105,7 +105,7 @@ usage_events.csv是当前事件底账，pricing_catalog.csv保存本期SKU单价
 
 准备环境时允许联网安装固定版本，正式处理本地材料时无需联网。操作者需要创建本地数据库、执行DDL与DML、读取输入目录和新建输出目录的权限，不需要远程数据库、生产账单权限或客户凭据。
 
-计量入账最怕跨账户更正只写入新归属而没有回冲旧归属，几条同批变化还可能落到同一个汇总键。批次净变化要在数据库里按业务键合并，并在每批结束后与事件底账重算结果对齐。","1. 在PostgreSQL Client中装载pricing_catalog.csv、usage_events.csv和correction_batches.csv，建立SKU引用、事件主键和批次顺序约束。
+计量入账的主要风险是跨账户更正只写入新归属而没有回冲旧归属，几条同批变化还可能落到同一个汇总键。批次净变化要在数据库里按业务键合并，并在每批结束后与事件底账重算结果对齐。","1. 在PostgreSQL Client中装载pricing_catalog.csv、usage_events.csv和correction_batches.csv，建立SKU引用、事件主键和批次顺序约束。
 
 2. 建立usage_event、daily_charge、charge_delta_log与batch_reconciliation，金额使用numeric固定精度。
 
