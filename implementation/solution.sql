@@ -66,7 +66,7 @@ BEGIN
       SELECT account_id,service_day,sku,sum(quantity)::numeric AS dq,sum(quantity*unit_price)::numeric AS da,count(*)::integer AS dc
       FROM inserted_rows WHERE billable GROUP BY account_id,service_day,sku
     ) x;
-    IF rows_json IS NOT NULL THEN PERFORM apply_charge_delta(current_setting('metering.batch_id',true),'INSERT',rows_json); END IF;
+    IF rows_json IS NOT NULL THEN PERFORM metering.apply_charge_delta(current_setting('metering.batch_id',true),'INSERT',rows_json); END IF;
     RETURN NULL;
 END $$;
 
@@ -77,7 +77,7 @@ BEGIN
       SELECT account_id,service_day,sku,-sum(quantity)::numeric AS dq,-sum(quantity*unit_price)::numeric AS da,-count(*)::integer AS dc
       FROM deleted_rows WHERE billable GROUP BY account_id,service_day,sku
     ) x;
-    IF rows_json IS NOT NULL THEN PERFORM apply_charge_delta(current_setting('metering.batch_id',true),'DELETE',rows_json); END IF;
+    IF rows_json IS NOT NULL THEN PERFORM metering.apply_charge_delta(current_setting('metering.batch_id',true),'DELETE',rows_json); END IF;
     RETURN NULL;
 END $$;
 
@@ -92,7 +92,7 @@ BEGIN
         SELECT account_id,service_day,sku,quantity AS dq,quantity*unit_price AS da,1 AS dc FROM new_rows WHERE billable
       ) d GROUP BY account_id,service_day,sku HAVING sum(dq)<>0 OR sum(da)<>0 OR sum(dc)<>0
     ) x;
-    IF rows_json IS NOT NULL THEN PERFORM apply_charge_delta(current_setting('metering.batch_id',true),'UPDATE',rows_json); END IF;
+    IF rows_json IS NOT NULL THEN PERFORM metering.apply_charge_delta(current_setting('metering.batch_id',true),'UPDATE',rows_json); END IF;
     RETURN NULL;
 END $$;
 
